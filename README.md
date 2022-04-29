@@ -1,8 +1,8 @@
 - I use TailwindCSS to build the UI for the whole app, React Router V6 to handle navigate in app
 - I only use React Context and React Hook to share state across components instead of Redux
-- 
+- The project structure is described as below
 ```
-project
+src
 │
 └───api: contains the axios instance for making the requests.
 │
