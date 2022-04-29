@@ -1,3 +1,4 @@
+- I use create-react-app with typescript template to provision the application.
 - I use TailwindCSS to build the UI for the whole app, React Router V6 to handle navigate in app
 - I only use React Context and React Hook to share state across components instead of Redux
 - The project structure is described as below
@@ -28,8 +29,4 @@ src
 │
 │
 └─── routes.tsx: All pages route will locate in this file.
-│
-│
-│
-└─── hooks: Contains all React custom hooks
 ```
