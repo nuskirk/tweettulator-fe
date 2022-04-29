@@ -21,7 +21,7 @@ const styles = {
     "mb-8 min-w-[50%]"
   ),
   btnReply: clsx("flex justify-end bg-blue"),
-  nestedReply: clsx("ml-16"),
+  nestedReply: clsx("ml-32"),
 };
 
 type MessageProps = Pick<
@@ -30,6 +30,7 @@ type MessageProps = Pick<
 > & {
   parent?: IMessage;
   hasReply?: boolean;
+  className?: string;
 };
 
 export default function ItemComponent(props: MessageProps) {
@@ -73,7 +74,8 @@ export default function ItemComponent(props: MessageProps) {
         <div
           className={clsx(
             styles.roundedBorder,
-            props.parentId && styles.nestedReply
+            props.parentId && styles.nestedReply,
+            props.className
           )}
         >
           <div className="mb-8">
@@ -138,6 +140,7 @@ export default function ItemComponent(props: MessageProps) {
               {...child}
               parent={props}
               hasReply={index === props.reps!.length - 1}
+              className="bg-slate-300"
             />
           ))}
     </>

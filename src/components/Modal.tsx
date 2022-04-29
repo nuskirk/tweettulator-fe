@@ -9,7 +9,7 @@ export default function Modal(props: ModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
       <div className="relative my-6 mx-auto w-auto max-w-3xl">
-        <div className="relative	 flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none transition-all focus:outline-none">
+        <div className="relative flex w-full flex-col rounded-lg border-2 bg-green-200 shadow-lg outline-none transition-all focus:outline-none">
           <div className="flex items-start justify-between rounded-t border-b border-solid border-gray-300 p-5 ">
             <h3 className="font=semibold text-3xl">{props.title}</h3>
           </div>

@@ -5,6 +5,7 @@ import ItemComponent from "../components/Item";
 import Modal from "../components/Modal";
 import useAuth from "../hooks/useAuth";
 import useItems from "../hooks/useItem";
+import { Accordion } from "./Accordion";
 
 export default function ListItemComponent() {
   const { user } = useAuth();
@@ -53,7 +54,12 @@ export default function ListItemComponent() {
       {currentItems &&
         currentItems.map((msg, index) => {
           return (
-            <ItemComponent key={index} {...msg} hasReply={!msg.reps?.length} />
+            <ItemComponent
+              key={index}
+              {...msg}
+              hasReply={!msg.reps?.length}
+              className="bg-blue-200"
+            />
           );
         })}
     </>
