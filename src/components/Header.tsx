@@ -1,5 +1,6 @@
 import clsx from "clsx";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const styles = {
   link: clsx(
@@ -8,6 +9,9 @@ const styles = {
 };
 
 export default function HeaderComponent() {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
   return (
     <nav className="rounded border-gray-200 bg-white px-2 py-2.5 dark:bg-gray-800 sm:px-4">
       <div className="container mx-auto flex flex-wrap items-center justify-between">
@@ -28,9 +32,20 @@ export default function HeaderComponent() {
               </NavLink>
             </li>
             <li>
-              <NavLink to="login" className={styles.link}>
-                Login
-              </NavLink>
+              {!user ? (
+                <NavLink to="login" className={styles.link}>
+                  Login
+                </NavLink>
+              ) : (
+                /*eslint-disable */
+                <a
+                  href="#"
+                  onClick={(e) => signOut(() => navigate("/login"))}
+                  className={styles.link}
+                >
+                  Logout
+                </a>
+              )}
             </li>
           </ul>
         </div>

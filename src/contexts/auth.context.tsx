@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { fakeAuthService } from "./auth.service";
@@ -14,6 +14,14 @@ export const AuthContext = React.createContext<AuthContextType>(null!);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   let [user, setUser] = React.useState<any>(null);
   const authService = fakeAuthService;
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      authService.isAuthenticated = true;
+      setUser(user);
+    }
+  }, []);
 
   let signIn = (newUser: string, callback: VoidFunction) => {
     return authService.signIn(() => {

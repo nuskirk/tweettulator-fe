@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { useState } from "react";
 import { IMessage } from "../api/interface";
-import { createMessage } from "../api/message";
+import { createMessage, listMessages } from "../api/message";
 import useAuth from "../hooks/useAuth";
 import useItems from "../hooks/useItem";
 import { Operator } from "../interfaces";
@@ -18,7 +18,7 @@ const styles = {
     "flex flex-col justify-between rounded-b  bg-white p-4",
     "border border-gray-400",
     "leading-normal rounded",
-    "mb-8 min-w-[30%]"
+    "mb-8 min-w-[50%]"
   ),
   btnReply: clsx("flex justify-end bg-blue"),
   nestedReply: clsx("ml-16"),
@@ -34,7 +34,7 @@ type MessageProps = Pick<
 
 export default function ItemComponent(props: MessageProps) {
   const { user } = useAuth();
-  const { currentItems, setCurrentItems } = useItems();
+  const { setCurrentItems } = useItems();
   const [showModal, setShowModal] = useState(false);
   const [currentReply, setCurrentReply] = useState("");
 
@@ -56,15 +56,14 @@ export default function ItemComponent(props: MessageProps) {
   }
 
   const handleReply = async (msgId: string) => {
-    const { data } = await createMessage({
+    await createMessage({
       parentId: msgId,
       text: currentReply,
       writer: user,
     });
 
-    console.log(`🚀 -> handleReply -> data`, data);
-    const newData = [...(currentItems || []), data];
-    setCurrentItems(newData);
+    const { data } = await listMessages();
+    setCurrentItems(data);
 
     setShowModal(false);
   };
@@ -80,7 +79,7 @@ export default function ItemComponent(props: MessageProps) {
           <div className="mb-8">
             <div className="flex justify-between">
               <div className="mb-2 flex text-xl font-bold text-gray-900 ">
-                Message: #{props.text}
+                Current message: {props.text}
               </div>
               {props.parent && (
                 <div className="mb-2 flex text-xl font-bold text-gray-900 ">
@@ -94,7 +93,7 @@ export default function ItemComponent(props: MessageProps) {
           <div className="flex items-center">
             <img
               className="mr-4 h-10 w-10 rounded-full"
-              src={"https://ui-avatars.com/api/?name=User"}
+              src={"https://ui-avatars.com/api/?name=" + props.writer}
               alt="User avatar"
             />
             <div className="text-sm">
@@ -120,7 +119,7 @@ export default function ItemComponent(props: MessageProps) {
           <Modal
             closeModal={() => setShowModal(false)}
             inputChanged={(e) => setCurrentReply(e.target.value)}
-            title={"Reply to thread #" + props.text}
+            title={"Reply to: " + props.text}
             onSubmit={() => handleReply(props._id!)}
           />
         </>
@@ -135,7 +134,7 @@ export default function ItemComponent(props: MessageProps) {
           })
           .map((child, index) => (
             <ItemComponent
-              key={child.text}
+              key={child._id}
               {...child}
               parent={props}
               hasReply={index === props.reps!.length - 1}
