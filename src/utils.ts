@@ -20,5 +20,6 @@ export function reflectOperator(
   arg1: string,
   arg2: string
 ) {
-  return OperatorHandler[op](parseFloat(arg1), parseFloat(arg2));
+  const result = OperatorHandler[op](parseFloat(arg1), parseFloat(arg2));
+  return parseFloat(result.toFixed(2));
 }
