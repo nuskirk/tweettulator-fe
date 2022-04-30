@@ -15,6 +15,6 @@ export default function useItems(items?: IMessage[]) {
     if (!items) {
       fetchThreads();
     }
-  }, [items]);
+  }, [items, currentItems]);
   return { currentItems, setCurrentItems };
 }

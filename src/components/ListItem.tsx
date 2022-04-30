@@ -5,7 +5,7 @@ import ItemComponent from "../components/Item";
 import Modal from "../components/Modal";
 import useAuth from "../hooks/useAuth";
 import useItems from "../hooks/useItem";
-import { Accordion } from "./Accordion";
+import { toast } from 'react-toastify';
 
 export default function ListItemComponent() {
   const { user } = useAuth();
@@ -18,14 +18,18 @@ export default function ListItemComponent() {
   }, [currentItems]);
 
   const handleCreateMessage = async (payload: ICreateMessage) => {
-    const { data } = await createMessage(payload);
-    const _items = [...currentItems!, data].sort((a, b) => {
-      return (
-        new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
-      );
-    });
-    setCurrentItems(_items);
-    setShowModal(false);
+    try {
+      const { data } = await createMessage(payload);
+      const _items = [...currentItems!, data].sort((a, b) => {
+        return (
+          new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+        );
+      });
+      setCurrentItems(_items);
+      setShowModal(false);
+    } catch (error) {
+      toast.error("Should be only integer");
+    }
   };
   return (
     <>

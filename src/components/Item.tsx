@@ -7,6 +7,7 @@ import useItems from "../hooks/useItem";
 import { Operator } from "../interfaces";
 import { reflectOperator } from "../utils";
 import Modal from "./Modal";
+import { toast } from 'react-toastify';
 
 const styles = {
   container: clsx("w-full max-w-sm lg:flex lg:max-w-full justify-center"),
@@ -57,16 +58,20 @@ export default function ItemComponent(props: MessageProps) {
   }
 
   const handleReply = async (msgId: string) => {
-    await createMessage({
-      parentId: msgId,
-      text: currentReply,
-      writer: user,
-    });
-
-    const { data } = await listMessages();
-    setCurrentItems(data);
-
-    setShowModal(false);
+    try {
+      await createMessage({
+        parentId: msgId,
+        text: currentReply,
+        writer: user,
+      });
+  
+      const { data } = await listMessages();
+      setCurrentItems(data);
+  
+      setShowModal(false);
+    } catch (error) {
+      toast.error("Should have an operator and a number");
+    }
   };
   return (
     <>
