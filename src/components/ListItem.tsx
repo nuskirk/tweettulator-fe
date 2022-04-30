@@ -63,6 +63,7 @@ export default function ListItemComponent() {
               {...msg}
               hasReply={!msg.reps?.length}
               className="bg-blue-200"
+              setCurrentItems={setCurrentItems}
             />
           );
         })}

@@ -1,13 +1,12 @@
 import clsx from "clsx";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { IMessage } from "../api/interface";
 import { createMessage, listMessages } from "../api/message";
 import useAuth from "../hooks/useAuth";
-import useItems from "../hooks/useItem";
 import { Operator } from "../interfaces";
 import { reflectOperator } from "../utils";
 import Modal from "./Modal";
-import { toast } from 'react-toastify';
 
 const styles = {
   container: clsx("w-full max-w-sm lg:flex lg:max-w-full justify-center"),
@@ -32,11 +31,11 @@ type MessageProps = Pick<
   parent?: IMessage;
   hasReply?: boolean;
   className?: string;
+  setCurrentItems: React.Dispatch<React.SetStateAction<IMessage[] | undefined>>;
 };
 
 export default function ItemComponent(props: MessageProps) {
   const { user } = useAuth();
-  const { setCurrentItems } = useItems();
   const [showModal, setShowModal] = useState(false);
   const [currentReply, setCurrentReply] = useState("");
 
@@ -64,10 +63,15 @@ export default function ItemComponent(props: MessageProps) {
         text: currentReply,
         writer: user,
       });
-  
+
       const { data } = await listMessages();
-      setCurrentItems(data);
-  
+      const sorted = data.sort((a, b) => {
+        return (
+          new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+        );
+      });
+      props.setCurrentItems(sorted);
+
       setShowModal(false);
     } catch (error) {
       toast.error("Should have an operator and a number");
@@ -146,6 +150,7 @@ export default function ItemComponent(props: MessageProps) {
               parent={props}
               hasReply={index === props.reps!.length - 1}
               className="bg-slate-300"
+              setCurrentItems={props.setCurrentItems}
             />
           ))}
     </>

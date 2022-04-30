@@ -12,9 +12,7 @@ export default function useItems(items?: IMessage[]) {
       });
       setCurrentItems(sorted);
     }
-    if (!items) {
-      fetchThreads();
-    }
-  }, [items, currentItems]);
+    fetchThreads();
+  }, [items]);
   return { currentItems, setCurrentItems };
 }
